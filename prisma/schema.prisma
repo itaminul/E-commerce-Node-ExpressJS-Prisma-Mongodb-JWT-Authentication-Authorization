@@ -14,7 +14,7 @@ model CourierService {
   phone String?
   mobileOne String?
   mobileTwo String?
-  emila String?
+  email String?
   courierType Int //1 for bangladesh 2 for abroad
   activeStatus Boolean @default(true)
   createdBy String?
