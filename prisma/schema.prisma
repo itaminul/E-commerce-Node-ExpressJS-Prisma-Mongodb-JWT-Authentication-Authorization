@@ -6,19 +6,58 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
 model CourierService {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  description String?
-  address String
-  phone String?
-  mobileOne String?
-  mobileTwo String?
-  email String?
-  courierType Int //1 for bangladesh 2 for abroad
-  activeStatus Boolean @default(true)
-  createdBy String?
-  createdDate DateTime @default(now())
-  updatedBy String
-  updatedDate DateTime
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String?
+  address      String
+  phone        String?
+  mobileOne    String?
+  mobileTwo    String?
+  email        String?
+  courierType  Int //1 for bangladesh 2 for abroad
+  activeStatus Boolean  @default(true)
+  createdBy    String?
+  createdDate  DateTime @default(now())
+  updatedBy    String
+  updatedDate  DateTime
+}
+
+model Products {
+  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
+  productName        String
+  productDescription String?
+  categoryId         String
+  subCategoryId      String
+  image              String
+  latestProduct      Int
+  productShow        Boolean
+  offer              Boolean
+  specialDiscount    Int
+  productSlNo        Int
+  productPrice       Float
+  currentPrice       Float
+  maufacturerBy      DateTime
+  warenty            Boolean
+  activeStatus       Boolean          @default(true)
+  createdBy          String?
+  createdDate        DateTime         @default(now())
+  updatedBy          String
+  updatedDate        DateTime
+  productsImages     ProductsImages[]
+}
+
+model ProductsImages {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  productId        String?   @db.ObjectId
+  products         Products? @relation(fields: [productId], references: [id])
+  imageName        String
+  imagePath        String
+  imageDescription String?
+  activeStatus     Boolean   @default(true)
+  createdBy        String?
+  createdDate      DateTime  @default(now())
+  updatedBy        String
+  updatedDate      DateTime
 }
