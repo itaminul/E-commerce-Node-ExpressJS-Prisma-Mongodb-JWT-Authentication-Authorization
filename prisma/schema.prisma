@@ -8,7 +8,7 @@ datasource db {
 }
 
 model CourierService {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   description  String?
   address      String
@@ -16,16 +16,18 @@ model CourierService {
   mobileOne    String?
   mobileTwo    String?
   email        String?
-  courierType  Int //1 for bangladesh 2 for abroad
-  activeStatus Boolean  @default(true)
+  courierType  Int? //1 for bangladesh 2 for abroad
+  activeStatus Boolean   @default(true)
   createdBy    String?
-  createdDate  DateTime @default(now())
-  updatedBy    String
-  updatedDate  DateTime
+  createdDate  DateTime?  @default(now())
+  updatedBy    String?
+  updatedDate  DateTime?
 }
 
 model Products {
   id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  storeId                 String?                   @db.ObjectId
+  store                   Store?                    @relation(fields: [storeId], references: [id])
   productName             String
   productDescription      String?
   categoryId              String
@@ -48,6 +50,26 @@ model Products {
   productsImages          ProductsImages[]
   requisitionChild        RequisitionChild[]
   requisitionApproveChild RequisitionApproveChild[]
+}
+
+model Store {
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  udId             Int?
+  storeName        String?
+  storeDescription String?
+  storeLocation    String?
+  remarks          String?
+  orgId            Int?
+  activeStatus     Boolean    @default(true)
+  createdDate      String?
+  createdTime      String?
+  createdBy        Int?
+  createdAt        DateTime   @default(now())
+  updatedDate      String?
+  updatedTime      String?
+  updatedAt        DateTime?
+  updatedBy        Int?
+  products         Products[]
 }
 
 model ProductsImages {
