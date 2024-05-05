@@ -4,6 +4,7 @@ import { PrismaService } from "./prisma-connection/primsa.service";
 import { ConfigModule } from "@nestjs/config";
 import { CacheModule } from "@nestjs/cache-manager";
 import { redisStore } from "cache-manager-redis-yet";
+import { RoleService } from './auth/role/role.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { redisStore } from "cache-manager-redis-yet";
     }),
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [PrismaService, RoleService, RoleService],
 })
 export class AppModule {}
