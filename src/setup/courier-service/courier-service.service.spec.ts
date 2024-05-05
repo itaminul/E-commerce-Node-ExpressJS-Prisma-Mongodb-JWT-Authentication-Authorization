@@ -2,11 +2,11 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { CourierServiceService } from "./courier-service.service";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { PrismaService } from "../../prisma-connection/primsa.service";
+import { CreateCourierServiceDto } from "./dto/create-courier-service.dto";
 
 const MockPrismaService = {
-  invItemSetup: {
-    create: jest.fn(), // Mock the create method
-    update: jest.fn(),
+  courierServiceSetup: {
+    create: jest.fn(),
   },
 };
 describe("CourierServiceService", () => {
@@ -32,7 +32,22 @@ describe("CourierServiceService", () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
+  it("create", async () => {
+    const createCourierServiceDto = new CreateCourierServiceDto();
+    const expectResult = {
+      ...createCourierServiceDto,
+    };
+    jest
+      .spyOn(MockPrismaService.courierServiceSetup, "create")
+      .mockRejectedValue(expectResult);
+    const result = await service.create(createCourierServiceDto);
+
+    expect(result).toEqual(expectResult);
+    expect(MockPrismaService.courierServiceSetup.create).toHaveBeenCalledWith({
+      data: expect.objectContaining(expectResult),
+    });
+  });
+  
+  it("update", async () => {
   });
 });
