@@ -25,27 +25,29 @@ model CourierService {
 }
 
 model Products {
-  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
-  productName        String
-  productDescription String?
-  categoryId         String
-  subCategoryId      String
-  image              String
-  latestProduct      Int
-  productShow        Boolean
-  offer              Boolean
-  specialDiscount    Int
-  productSlNo        Int
-  productPrice       Float
-  currentPrice       Float
-  maufacturerBy      DateTime
-  warenty            Boolean
-  activeStatus       Boolean          @default(true)
-  createdBy          String?
-  createdDate        DateTime         @default(now())
-  updatedBy          String
-  updatedDate        DateTime
-  productsImages     ProductsImages[]
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  productName             String
+  productDescription      String?
+  categoryId              String
+  subCategoryId           String
+  image                   String
+  latestProduct           Int
+  productShow             Boolean
+  offer                   Boolean
+  specialDiscount         Int
+  productSlNo             Int
+  productPrice            Float
+  currentPrice            Float
+  maufacturerBy           DateTime
+  warenty                 Boolean
+  activeStatus            Boolean                   @default(true)
+  createdBy               String?
+  createdDate             DateTime                  @default(now())
+  updatedBy               String
+  updatedDate             DateTime
+  productsImages          ProductsImages[]
+  requisitionChild        RequisitionChild[]
+  requisitionApproveChild RequisitionApproveChild[]
 }
 
 model ProductsImages {
@@ -60,4 +62,254 @@ model ProductsImages {
   createdDate      DateTime  @default(now())
   updatedBy        String
   updatedDate      DateTime
+}
+
+model Organization {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  orgName        String
+  orgDescription String?
+  serialNo       Int?
+  activeStatus   Boolean   @default(true)
+  createdDate    String?
+  createdTime    String?
+  createdBy      Int?
+  createdAt      DateTime  @default(now())
+  updatedDate    String?
+  updatedTime    String?
+  updatedAt      DateTime?
+  updatedBy      Int?
+}
+
+model Division {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  divisionName String
+  divisionDes  String?
+  orgId        Int?
+  serialNo     Int?
+  activeStatus Boolean    @default(true)
+  createdDate  String?
+  createdTime  String?
+  createdBy    Int?
+  createdAt    DateTime   @default(now())
+  updatedDate  String?
+  updatedTime  String?
+  updatedAt    DateTime?
+  updatedBy    Int?
+  district     District[]
+}
+
+model District {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  districtName String
+  districtDes  String?
+  division     Division? @relation(fields: [divisionId], references: [id])
+  divisionId   String?   @db.ObjectId
+  orgId        Int?
+  serialNo     Int?
+  activeStatus Boolean   @default(true)
+  createdDate  String?
+  createdTime  String?
+  createdBy    Int?
+  createdAt    DateTime  @default(now())
+  updatedDate  String?
+  updatedTime  String?
+  updatedAt    DateTime?
+  updatedBy    Int?
+  thana        Thana[]
+}
+
+model Thana {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  thanaName    String
+  thanaDes     String?
+  district     District? @relation(fields: [dristrictId], references: [id])
+  dristrictId  String?   @db.ObjectId
+  orgId        Int?
+  serialNo     Int?
+  activeStatus Boolean   @default(true)
+  createdDate  String?
+  createdTime  String?
+  createdBy    Int?
+  createdAt    DateTime  @default(now())
+  updatedDate  String?
+  updatedTime  String?
+  updatedAt    DateTime?
+  updatedBy    Int?
+}
+
+model Country {
+  id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  countryName        String?
+  countryDescription String?
+  countryCode        Int?
+  activeStatus       Boolean    @default(true)
+  createdDate        String?
+  createdTime        String?
+  createdBy          Int?
+  createdAt          DateTime   @default(now())
+  updatedDate        String?
+  updatedTime        String?
+  updatedAt          DateTime?
+  updatedBy          Int?
+  spplier            Supplier[]
+}
+
+model Supplier {
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  supplierName        String?
+  supplierDescription String?
+  country             Country?  @relation(fields: [countryId], references: [id])
+  countryId           String?   @db.ObjectId
+  orgId               Int?
+  activeStatus        Boolean   @default(true)
+  createdDate         String?
+  createdTime         String?
+  createdBy           Int?
+  createdAt           DateTime  @default(now())
+  updatedDate         String?
+  updatedTime         String?
+  updatedAt           DateTime?
+  updatedBy           Int?
+}
+
+model ProductGroup {
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  udId                    Int?
+  groupName               String?
+  groupDescription        String?
+  remarks                 String?
+  orgId                   Int?
+  activeStatus            Boolean                   @default(true)
+  createdDate             String?
+  createdTime             String?
+  createdBy               Int?
+  createdAt               DateTime                  @default(now())
+  updatedDate             String?
+  updatedTime             String?
+  updatedAt               DateTime?
+  updatedBy               Int?
+  requisitionChild        RequisitionChild[]
+  requisitionApproveChild RequisitionApproveChild[]
+}
+
+model Measurement {
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  measurementName         String
+  measurementDescription  String?
+  remarks                 String?
+  orgId                   Int?
+  activeStatus            Boolean                   @default(true)
+  createdDate             String?
+  createdTime             String?
+  createdBy               Int?
+  createdAt               DateTime                  @default(now())
+  updatedDate             String?
+  updatedTime             String?
+  updatedAt               DateTime?
+  updatedBy               Int?
+  requisitionChild        RequisitionChild[]
+  requisitionApproveChild RequisitionApproveChild[]
+}
+
+model RequisitionParent {
+  id                       String                    @id @default(auto()) @map("_id") @db.ObjectId
+  requisitionNo            String
+  requisitionType          Int? //1 for internal, 2 for external
+  requisitionFrom          Int?
+  requisitionTo            Int?
+  itemGroupId              Int?
+  itemId                   Int?
+  requisitionDate          DateTime
+  requisitionStatus        Int                       @default(0) // 0 form requisition pending 1 form approve 2 for cancel
+  requisitionRemarks       String
+  requisitionAppCanRemarks String // requisition approved or cancel satus
+  requisitionBy            Int?
+  orgId                    Int?
+  activeStatus             Boolean                   @default(true)
+  createdDate              String?
+  createdTime              String?
+  createdBy                Int?
+  createdAt                DateTime                  @default(now())
+  updatedDate              String?
+  updatedTime              String?
+  updatedAt                DateTime?
+  updatedBy                Int?
+  requisitionChild         RequisitionChild[]
+  requisitionApproveChild  RequisitionApproveChild[]
+}
+
+model RequisitionChild {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  requisitionParent RequisitionParent? @relation(fields: [requisitionId], references: [id])
+  requisitionId     String?            @db.ObjectId
+  productGroup      ProductGroup?      @relation(fields: [productGroupId], references: [id])
+  productGroupId    String?            @db.ObjectId
+  products          Products?          @relation(fields: [itemId], references: [id])
+  itemId            String?            @db.ObjectId
+  measurement       Measurement?       @relation(fields: [uomId], references: [id])
+  uomId             String?            @db.ObjectId
+  qty               Int
+  price             Int?
+  orgId             Int?
+  activeStatus      Boolean            @default(true)
+  createdDate       String?
+  createdTime       String?
+  createdBy         Int?
+  createdAt         DateTime           @default(now())
+  updatedDate       String?
+  updatedTime       String?
+  updatedAt         DateTime?
+  updatedBy         Int?
+}
+
+model RequisitionApproveParent {
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  requisitionNo           String
+  requisitionType         Int? //1 for internal, 2 for external
+  requisitionFrom         Int?
+  requisitionTo           Int?
+  itemGroupId             Int?
+  itemId                  Int?
+  requisitionDate         DateTime
+  requisitionStatus       Int                       @default(0) // 0 form requisition pending 1 form approve 2 for cancel
+  requisitionRemarks      String
+  requisitionBy           Int?
+  orgId                   Int?
+  activeStatus            Boolean                   @default(true)
+  createdDate             String?
+  createdTime             String?
+  createdBy               Int?
+  createdAt               DateTime                  @default(now())
+  updatedDate             String?
+  updatedTime             String?
+  updatedAt               DateTime?
+  updatedBy               Int?
+  requisitionApproveChild RequisitionApproveChild[]
+}
+
+model RequisitionApproveChild {
+  id                       String                    @id @default(auto()) @map("_id") @db.ObjectId
+  requisitionApproveParent RequisitionApproveParent? @relation(fields: [requisitionApproveId], references: [id])
+  requisitionApproveId     String?                   @db.ObjectId
+  requisitionParent        RequisitionParent?        @relation(fields: [requisitionId], references: [id])
+  requisitionId            String?                   @db.ObjectId
+  productGroup             ProductGroup?             @relation(fields: [itemGroupId], references: [id])
+  itemGroupId              String?                   @db.ObjectId
+  products                 Products?                 @relation(fields: [productId], references: [id])
+  productId                String?                   @db.ObjectId
+  measurement              Measurement?              @relation(fields: [uomId], references: [id])
+  uomId                    String?                   @db.ObjectId
+  approvedQty              Int?
+  receivedQty              Int?
+  price                    Int?
+  orgId                    Int?
+  activeStatus             Boolean                   @default(true)
+  createdDate              String?
+  createdTime              String?
+  createdBy                Int?
+  createdAt                DateTime                  @default(now())
+  updatedDate              String?
+  updatedTime              String?
+  updatedAt                DateTime?
+  updatedBy                Int?
 }
