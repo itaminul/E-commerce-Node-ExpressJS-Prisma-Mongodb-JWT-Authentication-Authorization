@@ -1,28 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { Role, Permission, User  } from '@prisma/client';
-import { PrismaService } from 'src/prisma-connection/primsa.service';
+import { Injectable } from "@nestjs/common";
+import { Permission, User, UserRole } from "@prisma/client";
+import { PrismaService } from "src/prisma-connection/primsa.service";
 
 @Injectable()
 export class RoleService {
-    constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
-    async getAllRoles(): Promise<Role[]> {
-        return this.prisma.role.findMany();
-      }
-    
-      async getAllPermissions(): Promise<Permission[]> {
-        return this.prisma.permission.findMany();
-      }
-    
-      async getPermissionsForRole(roleId: string) {
-         this.prisma.role.findUnique({
-          where: { id: roleId },
-        });
-      }
-    
-      async getRolesForUser(userId: string) {
-         this.prisma.user.findUnique({
-          where: { id: userId },
-        });
-      }
+  async getAllRoles(): Promise<UserRole[]> {
+    return this.prisma.userRole.findMany();
+  }
+
+  async getAllPermissions(): Promise<Permission[]> {
+    return this.prisma.permission.findMany();
+  }
+
+  async getPermissionsForRole(roleId: string): Promise<Permission[]> {
+    return this.prisma.userRole
+      .findUnique({
+        where: { id: roleId },
+      })
+      .permission();
+  }
+
+  async getRolesForUser(userId: string): Promise<UserRole[]> {
+    const results = this.prisma.user
+      .findUnique({
+        where: { id: userId },
+      })
+      .UserRole();
+    return results;
+  }
 }

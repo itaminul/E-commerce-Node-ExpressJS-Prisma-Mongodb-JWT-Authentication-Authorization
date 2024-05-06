@@ -6,15 +6,18 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from "@nestjs/common";
 import { CourierServiceService } from "./courier-service.service";
 import { CreateCourierServiceDto } from "./dto/create-courier-service.dto";
 import { UpdateCourierServiceDto } from "./dto/update-courier-service.dto";
+import { AuthMiddleware } from "src/auth/auth.middleware";
 
 @Controller("courier-service")
 export class CourierServiceController {
   constructor(private readonly courierService: CourierServiceService) {}
   @Get()
+  @UseGuards(AuthMiddleware)
   async getAll() {
     try {
       const results = await this.courierService.getAll();

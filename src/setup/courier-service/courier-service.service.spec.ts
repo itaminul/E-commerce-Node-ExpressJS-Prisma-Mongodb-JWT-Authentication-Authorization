@@ -47,7 +47,6 @@ describe("CourierServiceService", () => {
       data: expect.objectContaining(expectResult),
     });
   });
-  
-  it("update", async () => {
-  });
+
+  it("update", async () => {});
 });
