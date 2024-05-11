@@ -8,6 +8,8 @@ import { RoleService } from './auth/role/role.service';
 import { AuthMiddleware } from "./auth/auth.middleware";
 import { CourierServiceController } from "./setup/courier-service/courier-service.controller";
 import { CastModule } from './cast/cast.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { CastModule } from './cast/cast.module';
       isGlobal: true,
     }),
     CastModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [PrismaService, RoleService],
