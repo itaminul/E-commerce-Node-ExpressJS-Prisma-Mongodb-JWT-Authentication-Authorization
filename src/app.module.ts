@@ -7,6 +7,7 @@ import { redisStore } from "cache-manager-redis-yet";
 import { RoleService } from './auth/role/role.service';
 import { AuthMiddleware } from "./auth/auth.middleware";
 import { CourierServiceController } from "./setup/courier-service/courier-service.controller";
+import { CastModule } from './cast/cast.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CourierServiceController } from "./setup/courier-service/courier-servic
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    CastModule,
   ],
   controllers: [],
   providers: [PrismaService, RoleService],
