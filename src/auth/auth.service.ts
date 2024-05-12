@@ -1,4 +1,5 @@
 import {
+  Body,
   HttpException,
   HttpStatus,
   Injectable,
@@ -10,6 +11,7 @@ import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { compare } from "bcrypt";
+import { Request } from "express";
 @Injectable()
 export class AuthService {
   constructor(
@@ -43,29 +45,25 @@ export class AuthService {
     }
     if (user && passwordValid) {
       return {
-        // userId: user.id,
-        userName: user.email,
-        // userEmail: user.emailAddress,
-        // userMobile: user.mobileNumber,
-        // userRoleId: user.roleId,
-        //userOrgId: user.orgId
+        email: user.email,
       };
     }
 
     return null;
   }
 
-  async login(user: any): Promise<string> {
+  async login(@Body() body: any) {
     const checkUserExists = await this.prismaService.user.findUnique({
       where: {
-        email: user.email
+        email: body.email,
       },
     });
+    console.log("checkUserExists", checkUserExists);
     if (!checkUserExists) {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND);
     }
     const checkPassword = await compare(
-      user.password,
+      body.password,
       checkUserExists.password
     );
 
@@ -73,7 +71,7 @@ export class AuthService {
     if (checkPassword) {
       const accessToken = this.generateJWT({
         sub: checkUserExists.id,
-        username: checkUserExists.email,
+        email: checkUserExists.email,
         emailAddress: checkUserExists.emailAddress,
         mobileNumber: checkUserExists.mobileNumber,
         deptId: checkUserExists.deptId,
