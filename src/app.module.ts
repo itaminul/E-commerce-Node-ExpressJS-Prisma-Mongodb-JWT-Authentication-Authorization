@@ -10,6 +10,9 @@ import { CourierServiceController } from "./setup/courier-service/courier-servic
 import { CastModule } from './cast/cast.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { AuthService } from "./auth/auth.service";
+import { UsersService } from "./users/users.service";
+import { JwtService } from "@nestjs/jwt";
 
 @Module({
   imports: [
@@ -30,10 +33,10 @@ import { UsersModule } from './users/users.module';
     }),
     CastModule,
     AuthModule,
-    UsersModule,
+    UsersModule
   ],
   controllers: [],
-  providers: [PrismaService, RoleService],
+  providers: [PrismaService, RoleService, AuthService, UsersService, JwtService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

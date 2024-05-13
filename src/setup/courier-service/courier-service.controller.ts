@@ -12,12 +12,13 @@ import { CourierServiceService } from "./courier-service.service";
 import { CreateCourierServiceDto } from "./dto/create-courier-service.dto";
 import { UpdateCourierServiceDto } from "./dto/update-courier-service.dto";
 import { AuthMiddleware } from "src/auth/auth.middleware";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("courier-service")
 export class CourierServiceController {
   constructor(private readonly courierService: CourierServiceService) {}
+  @UseGuards(AuthGuard('local'))
   @Get()
-  @UseGuards(AuthMiddleware)
   async getAll() {
     try {
       const results = await this.courierService.getAll();
