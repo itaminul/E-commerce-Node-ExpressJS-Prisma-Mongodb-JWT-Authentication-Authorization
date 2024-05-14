@@ -36,22 +36,19 @@ export class AuthController {
   @Post("login")
   async login(@Body() body: any) {
     try {
-      const user = await this.prismaService.user.findUnique({
+      const user = await this.prismaService.user.findFirst({
         where: {
           email: body.email,
         },
       });
-      console.log("user user req", body);
       if (!user) {
         throw new HttpException("Invalid credentials", HttpStatus.UNAUTHORIZED);
       }
-      const results = await this.authService.login(user);
-      // return { access_token: token };
-      //   return this.authService.login(user);
+      const token = await this.authService.login(body.email, body.password);
       return {
         success: true,
         status: HttpStatus.OK,
-        results,
+        token,
       };
     } catch (error) {
       return { success: false, message: error.message };

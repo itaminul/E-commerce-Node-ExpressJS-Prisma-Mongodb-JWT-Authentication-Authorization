@@ -34,7 +34,7 @@ export class AuthService {
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.prismaService.user.findFirst({
       where: {
-        email: email,
+        email
       },
     });
     console.log("user", user);
@@ -52,21 +52,21 @@ export class AuthService {
     return null;
   }
 
-  async login(@Body() body: any) {
-    const checkUserExists = await this.prismaService.user.findUnique({
+  async login(email: string, password: string) {
+    const checkUserExists = await this.prismaService.user.findFirst({
       where: {
-        email: body.email,
+        email,
       },
     });
-    console.log("checkUserExists", checkUserExists);
     if (!checkUserExists) {
       throw new HttpException("User not found", HttpStatus.NOT_FOUND);
     }
-    const checkPassword = await compare(
-      body.password,
-      checkUserExists.password
+    const plaintextPasswordFromBody = password;
+    const hashedPasswordFromDB = checkUserExists.password;
+    const checkPassword = await bcrypt.compare(
+      plaintextPasswordFromBody,
+      hashedPasswordFromDB
     );
-
     delete checkUserExists.password;
     if (checkPassword) {
       const accessToken = this.generateJWT({
@@ -80,7 +80,19 @@ export class AuthService {
         orgId: checkUserExists.orgId,
       });
 
-      return accessToken;
+      const payload = {
+        sub: checkUserExists.id,
+        email: checkUserExists.email,
+        emailAddress: checkUserExists.emailAddress,
+        mobileNumber: checkUserExists.mobileNumber,
+        department: checkUserExists.deptId,
+        designation: checkUserExists.desigId,
+        role: checkUserExists.roleId,
+        organization: checkUserExists.orgId
+      };
+
+      const token =  this.generateJWT(payload);
+      return token;
     } else {
       throw new HttpException(
         "User or password not match",
@@ -92,7 +104,7 @@ export class AuthService {
   generateJWT(payload: any) {
     return this.jwtService.sign(payload, {
       secret: this.configService.get("JWT_SECRET"),
-      expiresIn: this.configService.get("expired"),
+      expiresIn: this.configService.get("JWT_EXPIRES_IN"),
     });
   }
 }
