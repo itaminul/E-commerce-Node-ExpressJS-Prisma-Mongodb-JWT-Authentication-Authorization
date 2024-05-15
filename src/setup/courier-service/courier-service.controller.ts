@@ -17,8 +17,8 @@ import { AuthGuard } from "@nestjs/passport";
 @Controller("courier-service")
 export class CourierServiceController {
   constructor(private readonly courierService: CourierServiceService) {}
-  @UseGuards(AuthGuard('jwt'))
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   async getAll() {
     try {
       const results = await this.courierService.getAll();
