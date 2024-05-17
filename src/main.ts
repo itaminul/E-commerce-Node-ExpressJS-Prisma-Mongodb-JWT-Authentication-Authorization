@@ -1,11 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import * as dotenv from 'dotenv';
+import { PrismaClientExceptionFilter } from './filters/prisma-client-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
   app.setGlobalPrefix('api')
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
+  app.enableCors();
+  await app.listen(9008);
 }
 bootstrap();
