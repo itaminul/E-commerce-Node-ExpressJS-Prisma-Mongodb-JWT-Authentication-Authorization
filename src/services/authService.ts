@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_ACCESS_SECRET } from '../config'
@@ -14,13 +14,14 @@ export class AuthService {
       await prismaService.$disconnect;
     }
   }
-  async register(req: Request, res: Response) {
-    const { email, password } = req.body;
+  async register(req: Request, res: Response, next: NextFunction) {
+    const { username,password } = req.body;
+    console.log("username", username);
     const hashedPassword = await bcrypt.hash(password, 10);
     try {
       const user = await prismaService.user.create({
         data: {
-          email,
+          username,
           password: hashedPassword,
         },
       });
@@ -31,20 +32,20 @@ export class AuthService {
       await prismaService.$disconnect;
     }
   }
-  async login(req: Request, res: Response) {
-    const { email, password } = req.body;
+  async login(req: Request, res: Response, next: NextFunction) {
+    const { username, password } = req.body;
     const user = await prismaService.user.findUnique({
       where: {
-        email,
+        username,
       },
     });
     if (!user) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: "Invalid username or password" });
     }
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Invalid username or password' });
     }
   
     const token = jwt.sign({ username: user.id }, JWT_ACCESS_SECRET, { expiresIn: '1h' });
