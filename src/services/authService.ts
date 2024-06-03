@@ -1,9 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_ACCESS_SECRET } from '../config'
 const prismaService = new PrismaClient();
+
+const users: User[] = [];
 export class AuthService {
   async getAll() {
     try {
@@ -15,14 +17,36 @@ export class AuthService {
     }
   }
   async register(req: Request, res: Response, next: NextFunction) {
-    const { username,password } = req.body;
-    console.log("username", username);
+    const { username,password, roleId } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
+    users.push({
+      username, password: hashedPassword, roleId,
+      id: "",
+      email: null,
+      phoneNumber: null,
+      mobileNumber: null,
+      emailAddress: null,
+      deptId: null,
+      desigId: null,
+      orgId: null,
+      companyId: null,
+      activeStatus: false,
+      createdDate: null,
+      createdTime: null,
+      createdBy: null,
+      createdAt: null,
+      updatedDate: null,
+      updatedTime: null,
+      updatedAt: null,
+      twoFA: false,
+      isPhoneVerified: false
+    });
     try {
       const user = await prismaService.user.create({
         data: {
           username,
           password: hashedPassword,
+          roleId
         },
       });
       res.status(201).json({ message: "User register successfully", user });
