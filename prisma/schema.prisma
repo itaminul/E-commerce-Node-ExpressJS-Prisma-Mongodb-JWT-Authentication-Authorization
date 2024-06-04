@@ -17,7 +17,6 @@ model User {
   emailAddress    String?
   deptId          Int?
   desigId         Int?
-  roleId          Int?
   orgId           Int?
   companyId       Int?
   activeStatus    Boolean      @default(true)
@@ -33,6 +32,11 @@ model User {
   isPhoneVerified Boolean?      @default(false)
   permission      Permission[]
   UserRole        UserRole[]
+  role     Role    @default(USER)
+}
+enum Role {
+  USER
+  ADMIN
 }
 
 model Permission {

@@ -1,9 +1,16 @@
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { JWT_ACCESS_SECRET } from '../config'
+import { JWT_ACCESS_SECRET } from "../config";
+import generateToken from "../utils/generateToken";
 const prismaService = new PrismaClient();
+
+interface User {
+  username: string;
+  password: string;
+  role: string; // Add role field
+}
 
 const users: User[] = [];
 export class AuthService {
@@ -17,36 +24,34 @@ export class AuthService {
     }
   }
   async register(req: Request, res: Response, next: NextFunction) {
-    const { username,password, roleId } = req.body;
+    const { username, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     users.push({
-      username, password: hashedPassword, roleId,
-      id: "",
-      email: null,
-      phoneNumber: null,
-      mobileNumber: null,
-      emailAddress: null,
-      deptId: null,
-      desigId: null,
-      orgId: null,
-      companyId: null,
-      activeStatus: false,
-      createdDate: null,
-      createdTime: null,
-      createdBy: null,
-      createdAt: null,
-      updatedDate: null,
-      updatedTime: null,
-      updatedAt: null,
-      twoFA: false,
-      isPhoneVerified: false
+      username,
+      password: hashedPassword,
+      role,
     });
+
+    const isUserAllReadyExist = await prismaService.user.findFirst({
+      where: {
+        username,
+      },
+    });
+
+    if (isUserAllReadyExist) {
+      res.json({
+        success: true,
+        message: "User Already Exist",
+        isUserAllReadyExist,
+      });
+    }
+
     try {
       const user = await prismaService.user.create({
         data: {
           username,
           password: hashedPassword,
-          roleId
+          role,
         },
       });
       res.status(201).json({ message: "User register successfully", user });
@@ -69,13 +74,15 @@ export class AuthService {
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ error: "Invalid username or password" });
     }
-  
-    const token = jwt.sign({ username: user.id }, JWT_ACCESS_SECRET, { expiresIn: '1h' });
-  
-    res.json({ token });
-
-    }
-  
+    const token = generateToken(user.id, user.role);
+    res.json({
+      userId: user.id,
+      userName: user.username,
+      email: user.email,
+      userRole: user.role,
+      token,
+    });
+  }
 }

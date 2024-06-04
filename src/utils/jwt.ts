@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
-function generateAccessToken(user: any) {
-  return jwt.sign({ userId: user.id }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: "1d",
+function generateAccessToken(user: any, role: string) {
+  return jwt.sign({ userId: user.id, userRole: role }, process.env.JWT_ACCESS_SECRET, {
+    expiresIn: "1h",
   });
 }
 
-function generateTokens(user: any, jti: any) {
-  const accessToken = generateAccessToken(user);
+function generateTokens(user: any, role: any) {
+  const accessToken = generateAccessToken(user, role);
   return {
     accessToken,
   };
