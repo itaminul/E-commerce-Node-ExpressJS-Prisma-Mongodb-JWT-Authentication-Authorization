@@ -41,20 +41,26 @@ export const authorizeRole = (roles: string[]) => {
   };
 };
 
-export const admin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (req.user && req.user.role === 'ADMIN') {
+export const admin = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user && req.user.role === "ADMIN") {
     next();
   } else {
-    res.status(403).json({ message: 'Not authorized as an admin' });
+    res.status(403).json({ message: "Not authorized as an admin" });
   }
 };
 
-export const user = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (req.user && req.user.role === 'USER') {
+export const user = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user && req.user.role === "USER") {
     next();
   } else {
-    res.status(403).json({ message: 'Not authorized as an admin' });
+    res.status(403).json({ message: "Not authorized as an admin" });
   }
 };
-
-
