@@ -24,13 +24,13 @@ model User {
   createdDate     String?
   createdTime     String?
   createdBy       Int?
-  createdAt       DateTime     @default(now())
+  createdAt       DateTime?     @default(now())
   updatedDate     String?
   updatedTime     String?
   updatedAt       DateTime?
-  twoFA           Boolean      @default(false)
+  twoFA           Boolean?      @default(false)
   Otp             Otp[]
-  isPhoneVerified Boolean      @default(false)
+  isPhoneVerified Boolean?      @default(false)
   permission      Permission[]
   UserRole        UserRole[]
 }
