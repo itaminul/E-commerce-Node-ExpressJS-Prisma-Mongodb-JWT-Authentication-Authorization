@@ -82,6 +82,9 @@ export class AuthService {
       userName: user.username,
       email: user.email,
       userRole: user.role,
+      department: user.deptId,
+      designation: user.desigId,
+      organization: user.orgId,
       token,
     });
   }

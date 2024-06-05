@@ -10,11 +10,11 @@ router.post('/login', authController.login);
 router.get('/check', authenticateToken,authController.check);
 
 // Role-based routes
-router.get('/user', authenticateToken1, authorizeRoles('USER', 'ADMIN', 'SUPER_ADMIN'), (req, res) => {
+router.get('/user', authenticateToken1, authorizeRoles('USER'), (req, res) => {
     res.send('User route');
   });
   
-  router.get('/admin', authenticateToken1, authorizeRoles('ADMIN', 'SUPER_ADMIN'), (req, res) => {
+  router.get('/admin', authenticateToken1, authorizeRoles('ADMIN'), (req, res) => {
     res.send('Admin route');
   });
   
