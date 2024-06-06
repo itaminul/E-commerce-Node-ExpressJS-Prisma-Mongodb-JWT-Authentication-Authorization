@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../../services/authService";
 import { UserLogin } from "./userLoginType";
 const authService = new AuthService();
+
 export class AuthController {
 
     async register(req: Request, res: Response, next: NextFunction) {
@@ -26,5 +27,12 @@ export class AuthController {
             
           }
 
+    }
+    async check(req: Request, res: Response, next: NextFunction) {
+      try {
+        console.log("result");
+      } catch (error) {
+        res.json({ message: error})
+      }
     }
 }
