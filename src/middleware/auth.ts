@@ -6,7 +6,7 @@ const prismaService = new PrismaClient();
 interface AuthenticatedRequest extends Request {
   user?: any; // Define the 'user' property as optional and of any type
 }
-export const authenticateToken1 = async (
+export const authenticateUsingJWTToken = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction

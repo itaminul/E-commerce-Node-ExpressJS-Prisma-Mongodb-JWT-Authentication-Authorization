@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticateToken1, authorizeRoles } from "../middleware/auth";
+import { authenticateUsingJWTToken, authorizeRoles } from "../middleware/auth";
 import { ProductController } from "../controller/product/productController";
 import { productCreateValidator } from "../validator/productValidation";
 const productController = new ProductController();
@@ -8,9 +8,16 @@ const router = Router();
 
 router.get(
   "/getProduct",
-  authenticateToken1,
+  authenticateUsingJWTToken,
   authorizeRoles("USER", "ADMIN"),
   productController.getAll
+);
+
+router.post(
+  "/createProduct",
+  authenticateUsingJWTToken,
+  authorizeRoles("ADMIN"),
+  productController.create
 );
 
 export default router;

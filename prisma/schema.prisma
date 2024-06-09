@@ -97,22 +97,23 @@ model Products {
   productName             String
   productDescription      String?
   categoryId              String
-  subCategoryId           String
-  image                   String
+  subCategoryId           String?
+  image                   String?
   latestProduct           Int
-  productShow             Boolean
-  offer                   Boolean
-  specialDiscount         Int
-  productSlNo             Int
+  productShow             Boolean @default(true)
+  offer                   Boolean @default(false)
+  specialDiscount         Int?
+  productSlNo             Int?
   productPrice            Float
-  currentPrice            Float
-  maufacturerBy           DateTime
-  warenty                 Boolean
+  currentPrice            Float?
+  maufacturerBy           Int?
+  manufactureDate DateTime?
+  warenty                 Boolean @default(true)
   activeStatus            Boolean                   @default(true)
   createdBy               String?
   createdDate             DateTime                  @default(now())
-  updatedBy               String
-  updatedDate             DateTime
+  updatedBy               String?
+  updatedDate             DateTime?
   productsImages          ProductsImages[]
   requisitionChild        RequisitionChild[]
   requisitionApproveChild RequisitionApproveChild[]
