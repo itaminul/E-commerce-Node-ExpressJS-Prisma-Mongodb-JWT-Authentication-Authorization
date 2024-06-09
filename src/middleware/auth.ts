@@ -14,7 +14,6 @@ export const authenticateToken1 = async (
   const authHeader = req.headers["authorization"];
   if (authHeader) {
     const token = authHeader && authHeader.split(" ")[1];
-
     if (token == null) return res.sendStatus(401);
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as {
       id: string;
@@ -27,12 +26,6 @@ export const authenticateToken1 = async (
     });
 
     req.user = user;
-
-    // jwt.verify(token, JWT_ACCESS_SECRET, (err, user) => {
-    //   if (err) return res.sendStatus(403);
-    //   req.user = user;
-    //   next();
-    // });
     next();
   } else {
     res.sendStatus(401);
