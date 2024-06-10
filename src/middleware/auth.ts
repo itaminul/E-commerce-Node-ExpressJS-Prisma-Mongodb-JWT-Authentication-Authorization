@@ -15,22 +15,32 @@ export const authenticateUsingJWTToken = async (
   if (authHeader) {
     const token = authHeader && authHeader.split(" ")[1];
     if (token == null) return res.sendStatus(401);
-    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as {
-      id: string;
-      role: string;
-    };
-    const user = await prismaService.user.findUnique({
-      where: {
-        id: decoded.id,
-      },
-    });
 
-    req.user = user;
-    next();
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as {
+        id: string;
+        role: string;
+      };
+      const user = await prismaService.user.findUnique({
+        where: {
+          id: decoded.id,
+        },
+      });
+
+      req.user = user;
+      next();
+    } catch (error: any) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(403).json({ message: "Token expired" });
+      }
+      return res.status(403).json({ message: "Invalid token" });
+    }
   } else {
     res.sendStatus(401);
   }
 };
+
+
 
 export const user = (
   req: AuthenticatedRequest,
