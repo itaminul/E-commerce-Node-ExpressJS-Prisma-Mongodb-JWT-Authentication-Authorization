@@ -15,9 +15,11 @@ router.get(
 
 router.post(
   "/createProduct",
-  authenticateUsingJWTToken,
+   authenticateUsingJWTToken,
   authorizeRoles("ADMIN"),
+  productCreateValidator(),
   productController.create
 );
+
 
 export default router;
