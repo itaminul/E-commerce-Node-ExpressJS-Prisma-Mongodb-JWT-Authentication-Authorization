@@ -1,7 +1,7 @@
 import { ValidationChain, body, check } from "express-validator";
 
 export const productCreateValidator = (): ValidationChain[] => [
-  check("name")
+  check("productName")
     .notEmpty()
     .withMessage("Product name is required")
     .isString()
