@@ -15,11 +15,26 @@ router.get(
 
 router.post(
   "/createProduct",
-   authenticateUsingJWTToken,
+  authenticateUsingJWTToken,
   authorizeRoles("ADMIN"),
   productCreateValidator(),
   productController.create
 );
 
+router.patch(
+  "/updateProduct/:id",
+  authenticateUsingJWTToken,
+  authorizeRoles("ADMIN"),
+  productCreateValidator(),
+  productController.update
+);
+
+router.delete(
+  "/deleteProduct/:id",
+  authenticateUsingJWTToken,
+  authorizeRoles("ADMIN"),
+  productCreateValidator(),
+  productController.deleteProduct
+);
 
 export default router;
