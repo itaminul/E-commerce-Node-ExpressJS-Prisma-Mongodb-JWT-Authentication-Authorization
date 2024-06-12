@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from "express";
 
 function prismaClientExceptionFilter(err: any, req: Request, res: Response, next: NextFunction) {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    // The .code property can be used to switch statements to handle known errors
     switch (err.code) {
       case "P2002":
         res.status(409).json({
@@ -11,7 +10,6 @@ function prismaClientExceptionFilter(err: any, req: Request, res: Response, next
           details: err.meta,
         });
         break;
-      // Add more cases as needed
       default:
         res.status(500).json({
           error: "An unknown error occurred",
