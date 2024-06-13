@@ -4,7 +4,11 @@ const prismaService = new PrismaClient();
 
 export class ProductService {
   async getAll() {
-    return await prismaService.products.findMany();
+    return await prismaService.products.findMany({
+      where: {
+        activeStatus: true,
+      },
+    });
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
