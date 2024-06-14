@@ -10,4 +10,16 @@ export const productCreateValidator = (): ValidationChain[] => [
     .withMessage("Product name at least 1 character")
     .trim()
     .escape(),
+
+  check("categoryId")
+    .notEmpty()
+    .withMessage("categoryId name is required")
+    .isNumeric()
+    .withMessage("categoryId name must me number"),
+
+  check("latestProduct")
+    .notEmpty()
+    .withMessage("latestProduct name is required")
+    .isNumeric()
+    .withMessage("latestProduct name must me number")
 ];
