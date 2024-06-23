@@ -3,6 +3,9 @@ import { NextFunction, Request, Response } from "express";
 const prismaService = new PrismaClient();
 
 export class StoreSetupServie {
+  /**
+   * Get all active status true data .
+   */
   async getAll(next: NextFunction) {
     try {
       const results = await prismaService.store.findMany({
@@ -15,7 +18,9 @@ export class StoreSetupServie {
       next(error);
     }
   }
-
+  /**
+   * Create store setup .
+   */
   async create(req: Request, res: Response, next: NextFunction) {
     const { udId, storeName, storeDescription, storeLocation, remarks } =
       req.body;
@@ -34,6 +39,9 @@ export class StoreSetupServie {
       next(error);
     }
   }
+  /**
+   * Update store data by id.
+   */
 
   async update(req: Request, res: Response, next: NextFunction) {
     const {
@@ -64,16 +72,27 @@ export class StoreSetupServie {
     }
   }
 
+  /**
+   * Delete store data by id.
+   */
   async deleteStore(req: Request, res: Response, next: NextFunction) {
-    try {
-      const products = await prismaService.store.delete({
-        where: {
-          id: req.params.id,
-        },
-      });
-      return products;
-    } catch (error) {
-      next(error);
+    const checkExists = await prismaService.store.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (checkExists) {
+      try {
+        const products = await prismaService.store.delete({
+          where: {
+            id: req.params.id,
+          },
+        });
+        return products;
+      } catch (error) {
+        next(error);
+      }
+    } else {
     }
   }
 }
