@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 const prismaService = new PrismaClient();
-export class CourierService {
-  async getAll(next: NextFunction) {
+export class CourierSetupService {
+  async getAll(res: Response, next: NextFunction) {
     try {
       const results = await prismaService.courierService.findMany({
         where: {
