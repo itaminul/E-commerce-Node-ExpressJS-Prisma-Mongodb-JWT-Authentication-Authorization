@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { error } from "console";
 import { NextFunction, Request, Response } from "express";
 const prismaService = new PrismaClient();
 
@@ -52,6 +53,7 @@ export class StoreSetupServie {
       remarks,
       activeStatus,
     } = req.body;
+
     try {
       const data = await prismaService.store.update({
         where: {
