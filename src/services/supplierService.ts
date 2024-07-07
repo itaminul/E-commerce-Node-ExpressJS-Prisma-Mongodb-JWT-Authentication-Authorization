@@ -26,4 +26,42 @@ export class SupplierService {
       next(error);
     }
   }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {
+        supplierName,
+        supplierDescription,
+        countryId,
+        orgId,
+        activeStatus,
+      } = req.body;
+      const ifExist = await prismaService.supplier.findFirst({
+        where: {
+          id: req.params.id,
+        },
+      });
+
+      if(!ifExist) {
+        
+      }
+
+
+      const results = await prismaService.supplier.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          supplierName,
+          supplierDescription,
+          countryId,
+          orgId,
+          activeStatus,
+        },
+      });
+      return results;
+    } catch (error) {
+      next(error);
+    }
+  }
 }
