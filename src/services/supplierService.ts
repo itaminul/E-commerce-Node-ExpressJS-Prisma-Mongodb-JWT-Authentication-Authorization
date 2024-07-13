@@ -2,17 +2,19 @@ import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 const prismaService = new PrismaClient();
 export class SupplierService {
-  async getAll() {
-    return await prismaService.supplier.findMany({
+  async getAll(req: Request, res: Response, next: NextFunction) {
+    const results = await prismaService.supplier.findMany({
       where: {
         activeStatus: true,
       },
     });
+    return results;
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { supplierName, supplierDescription, countryId, orgId } = req.body;
+
       const results = await prismaService.supplier.create({
         data: {
           supplierName,
