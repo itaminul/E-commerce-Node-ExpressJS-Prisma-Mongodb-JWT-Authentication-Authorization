@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { CourierSetupService } from "../../services/courierSetupService";
 const courierSetupService = new CourierSetupService();
 export class CourierSetupController {
-  async getAll(res: Response, next: NextFunction) {
+  async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const reslts = await courierSetupService.getAll(res, next);
+      const reslts = await courierSetupService.getAll(req, res, next);
       res.json({ success: true, reslts });
     } catch (error) {
       next(error);
