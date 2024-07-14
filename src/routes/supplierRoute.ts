@@ -9,8 +9,6 @@ const supplierSetupController = new SupplierSetupController();
 const router = Router();
 router.get(
   "/getSupplier",
-  authenticateUsingJWTToken,
-  authorizeRoles("ADMIN", "USER"),
   supplierSetupController.getAll
 );
 router.post(
