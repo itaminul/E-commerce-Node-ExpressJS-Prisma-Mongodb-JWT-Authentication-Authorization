@@ -13,4 +13,21 @@ export class SupplierSetupController {
       next(error);
     }
   }
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const results = await supplierService.update(req, res, next);
+      res.json({ success: true, results });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteSupplier(req: Request, res: Response, next: NextFunction) {
+    try {
+      const results = await supplierService.deleteSupplier(req, res, next);
+      res.json({ success: true, results });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

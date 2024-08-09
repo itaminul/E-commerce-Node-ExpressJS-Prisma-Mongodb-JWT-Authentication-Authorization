@@ -42,10 +42,8 @@ export class SupplierService {
         },
       });
 
-      if(!ifExist) {
-        
+      if (!ifExist) {
       }
-
 
       const results = await prismaService.supplier.update({
         where: {
@@ -57,6 +55,28 @@ export class SupplierService {
           countryId,
           orgId,
           activeStatus,
+        },
+      });
+      return results;
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteSupplier(req: Request, res: Response, next: NextFunction) {
+    try {
+      const ifExist = await prismaService.supplier.findFirst({
+        where: {
+          id: req.params.id,
+        },
+      });
+
+      if (!ifExist) {
+      }
+
+      const results = await prismaService.supplier.delete({
+        where: {
+          id: req.params.id,
         },
       });
       return results;
