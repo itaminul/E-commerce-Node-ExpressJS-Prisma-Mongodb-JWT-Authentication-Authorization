@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { SupplierSetupController } from "../controller/setup/supplierSetupController";
 import { authenticateUsingJWTToken, authorizeRoles } from "../middleware/auth";
+import {
+  supplierSetupCreateValidation,
+  supplierSetupUpdateValidation,
+} from "../validator/supplierSetupValidation";
 const supplierSetupController = new SupplierSetupController();
 const router = Router();
 router.get(
@@ -13,18 +17,20 @@ router.post(
   "/createSupplier",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN", "USER"),
-  supplierSetupController.getAll
+  supplierSetupCreateValidation(),
+  supplierSetupController.create
 );
 router.patch(
   "/updateSupplier/:id",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN", "USER"),
-  supplierSetupController.getAll
+  supplierSetupUpdateValidation(),
+  supplierSetupController.update
 );
 router.delete(
   "/deleteSupplier/:id",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN", "USER"),
-  supplierSetupController.getAll
+  supplierSetupController.deleteSupplier
 );
 export default router;

@@ -1,30 +1,30 @@
 import { Router } from "express";
 import { authenticateUsingJWTToken, authorizeRoles } from "../middleware/auth";
-import { CourierSetupController } from "../controller/setup/courierSetupController";
-const courierSetupController = new CourierSetupController();
+import { SupplierSetupController } from "../controller/setup/supplierSetupController";
+const supplierSetupController = new SupplierSetupController();
 const router = Router();
 router.get(
   "/getCourier",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN", "USER"),
-  courierSetupController.getAll
+  supplierSetupController.getAll
 );
 router.post(
   "/createCourier",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN"),
-  courierSetupController.create
+  supplierSetupController.create
 );
 router.patch(
   "/updateCourier",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN"),
-  courierSetupController.update
+  supplierSetupController.update
 );
 router.delete(
-  "/deleteCourier",
+  "/deleteSupplier",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN"),
-  courierSetupController.deleteCourier
+  supplierSetupController.deleteSupplier
 );
 export default router;
