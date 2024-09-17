@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
+import { sendEmailController } from "../controller/emailController";
+const sendEmailControl = new sendEmailController();
 const prismaService = new PrismaClient();
 export class SupplierService {
   async getAll(req: Request, res: Response, next: NextFunction) {
@@ -8,6 +10,7 @@ export class SupplierService {
         activeStatus: true,
       },
     });
+    await sendEmailControl.sendEmail(req, res);
     return results;
   }
 

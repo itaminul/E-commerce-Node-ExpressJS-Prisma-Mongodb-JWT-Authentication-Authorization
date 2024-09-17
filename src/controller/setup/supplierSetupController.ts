@@ -11,6 +11,8 @@ export class SupplierSetupController {
       next(error);
     }
   }
+  //npm install nodemailer
+
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const errors = validationResult(req);
