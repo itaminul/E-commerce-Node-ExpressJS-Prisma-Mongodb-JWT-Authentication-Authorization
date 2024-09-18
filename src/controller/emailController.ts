@@ -7,8 +7,8 @@ export class sendEmailController {
     const mailOptions = {
       from: "itaminul@gmail.com",
       to: "aminul@atilimited.net",
-      subject:"dasfaf",
-      text: "7638885",
+      subject: subject,
+      text: text,
     };
 
     try {
