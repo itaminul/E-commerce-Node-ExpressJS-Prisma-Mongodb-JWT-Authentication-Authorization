@@ -118,7 +118,7 @@ model Products {
   productsImages          ProductsImages[]
   requisitionChild        RequisitionChild[]
   requisitionApproveChild RequisitionApproveChild[]
-  orderChild OrderChild[]
+  orderChild              OrderChild[]
 }
 
 model Store {
@@ -300,7 +300,7 @@ model Measurement {
   updatedBy               Int?
   requisitionChild        RequisitionChild[]
   requisitionApproveChild RequisitionApproveChild[]
-  orderChild OrderChild[]
+  orderChild              OrderChild[]
 }
 
 model RequisitionParent {
@@ -407,49 +407,50 @@ model RequisitionApproveChild {
 }
 
 model OrderParent {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  orderNo   String
-  orderDate DateTime
-  deliveryDate DateTime?
-  orderType String
-  orderBy String //user id
-  shipType String
-  paymentType  String //cache or due
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  orderNo         String
+  orderDate       DateTime
+  deliveryDate    DateTime?
+  orderType       String
+  orderBy         String //user id
+  shipType        String
+  paymentType     String //cache or due
   shippingAddress String
-  phoneNumber String?
-  postalCode Int?
-  orderStatus Int?
-  activeStatus Boolean   @default(true)
-  createdDate  String?
-  createdTime  String?
-  createdBy    Int?
-  createdAt    DateTime  @default(now())
-  updatedDate  String?
-  updatedTime  String?
-  updatedAt    DateTime?
-  updatedBy    Int?
+  phoneNumber     String?
+  postalCode      Int?
+  orderStatus     Int?
+  activeStatus    Boolean      @default(true)
+  createdDate     String?
+  createdTime     String?
+  createdBy       Int?
+  createdAt       DateTime     @default(now())
+  updatedDate     String?
+  updatedTime     String?
+  updatedAt       DateTime?
+  updatedBy       Int?
+  orderChild      OrderChild[]
 }
 
 model OrderChild {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  orderId   String
-  products Products @relation(fields: [itemId], references: [id])
-  itemId String @db.ObjectId
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderParent    OrderParent @relation(fields: [orderId], references: [id])
+  orderId        String      @db.ObjectId
+  products       Products    @relation(fields: [itemId], references: [id])
+  itemId         String      @db.ObjectId
   itemDescripton String?
-  itemQty Int
-  unitPrice Float
-  total Float
-  measurement Measurement @relation(fields: [uomId], references: [id])
-  uomId String @db.ObjectId
-  orderStatus Int?
-  activeStatus Boolean   @default(true)
-  createdDate  String?
-  createdTime  String?
-  createdBy    Int?
-  createdAt    DateTime  @default(now())
-  updatedDate  String?
-  updatedTime  String?
-  updatedAt    DateTime?
-  updatedBy    Int?
+  itemQty        Int
+  unitPrice      Float
+  total          Float
+  measurement    Measurement @relation(fields: [uomId], references: [id])
+  uomId          String      @db.ObjectId
+  orderStatus    Int?
+  activeStatus   Boolean     @default(true)
+  createdDate    String?
+  createdTime    String?
+  createdBy      Int?
+  createdAt      DateTime    @default(now())
+  updatedDate    String?
+  updatedTime    String?
+  updatedAt      DateTime?
+  updatedBy      Int?
 }
-
