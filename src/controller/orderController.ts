@@ -9,7 +9,11 @@ export class OrderController {
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
+   try {
     const results = await orderService.update(req, res, next);
     res.json({ success: true, results });
+   } catch (error) {
+    next(error);
+   }
   }
 }

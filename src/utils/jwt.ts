@@ -4,7 +4,7 @@ function generateAccessToken(user: any, role: string) {
     { userId: user.id, userRole: role },
     process.env.JWT_ACCESS_SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: "10h",
     }
   );
 }
