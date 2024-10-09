@@ -27,6 +27,9 @@ export class OrderController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
+      const orderId = req.params.id;
+      await orderService.checkId(orderId, req, res, next);
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({
