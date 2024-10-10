@@ -4,11 +4,18 @@ import { OrderController } from "../controller/orderController";
 const orderController = new OrderController();
 const route = Router();
 
-route.get(
-  "/getAllOrders",
+route.post(
+  "/createOrder",
   authenticateUsingJWTToken,
   authorizeRoles("ADMIN", "USER"),
   orderController.create
+);
+
+route.patch(
+  "/updateOrder/:id",
+  authenticateUsingJWTToken,
+  authorizeRoles("ADMIN", "USER"),
+  orderController.update
 );
 
 export default route;

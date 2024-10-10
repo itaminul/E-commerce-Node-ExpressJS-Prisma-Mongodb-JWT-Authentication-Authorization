@@ -435,14 +435,14 @@ model OrderChild {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   orderParent    OrderParent @relation(fields: [orderId], references: [id])
   orderId        String      @db.ObjectId
-  products       Products    @relation(fields: [itemId], references: [id])
-  itemId         String      @db.ObjectId
+  products       Products?    @relation(fields: [itemId], references: [id])
+  itemId         String?      @db.ObjectId
   itemDescripton String?
   itemQty        Int
   unitPrice      Float
   total          Float
-  measurement    Measurement @relation(fields: [uomId], references: [id])
-  uomId          String      @db.ObjectId
+  measurement    Measurement? @relation(fields: [uomId], references: [id])
+  uomId          String?      @db.ObjectId
   orderStatus    Int?
   activeStatus   Boolean     @default(true)
   createdDate    String?
