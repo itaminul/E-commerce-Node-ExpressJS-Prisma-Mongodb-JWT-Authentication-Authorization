@@ -2,9 +2,29 @@ import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 const prismaService = new PrismaClient();
 export class OrderServices {
-  async getAll(next: NextFunction) {
+  async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      return await prismaService.orderParent.findMany();
+      return await prismaService.orderParent.findMany({
+        select: {
+          id: true,
+          orderChild: {
+            select: {
+              id: true,
+              itemId: true,
+              itemDescripton: true,
+              itemQty: true,
+              orderId: true,
+              products: {
+                select: {
+                  productName: true,
+                  productDescription: true,
+                  productPrice: true,
+                },
+              },
+            },
+          },
+        },
+      });
     } catch (error) {
       next(error);
     }
@@ -50,7 +70,7 @@ export class OrderServices {
     }
   }
 
-   async  update(req: Request, res: Response, next: NextFunction) {
+  async update(req: Request, res: Response, next: NextFunction) {
     try {
       const {
         orderNo,
@@ -66,9 +86,9 @@ export class OrderServices {
         orderStatus,
         orderChild,
       } = req.body;
-  
+
       const orderId = req.params.id;
-  
+
       const updatedOrder = await prismaService.orderParent.update({
         where: { id: orderId },
         data: {
@@ -84,29 +104,31 @@ export class OrderServices {
           postalCode,
           orderStatus,
           orderChild: {
-            deleteMany: {}, // This will remove all existing child records
+            deleteMany: {},
             createMany: {
-              data: orderChild.map((child: {
-                itemDescripton: string;
-                itemQty: number;
-                unitPrice: number;
-                total: number;
-                itemId: string;
-              }) => ({
-                itemId: child.itemId,
-                itemDescripton: child.itemDescripton,
-                itemQty: child.itemQty,
-                unitPrice: child.unitPrice,
-                total: child.total,
-              })),
+              data: orderChild.map(
+                (child: {
+                  itemDescripton: string;
+                  itemQty: number;
+                  unitPrice: number;
+                  total: number;
+                  itemId: string;
+                }) => ({
+                  itemId: child.itemId,
+                  itemDescripton: child.itemDescripton,
+                  itemQty: child.itemQty,
+                  unitPrice: child.unitPrice,
+                  total: child.total,
+                })
+              ),
             },
           },
         },
         include: {
-          orderChild: true, // Include the updated child records in the response
+          orderChild: true,
         },
       });
-  
+
       res.status(200).json(updatedOrder);
     } catch (error) {
       next(error);

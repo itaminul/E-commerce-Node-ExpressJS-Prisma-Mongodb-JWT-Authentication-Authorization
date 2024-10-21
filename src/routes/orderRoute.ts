@@ -18,4 +18,10 @@ route.patch(
   orderController.update
 );
 
+route.get(
+  "/getAllOrders",
+  authenticateUsingJWTToken,
+  authorizeRoles("ADMIN", "USER"),
+  orderController.getAll
+);
 export default route;
