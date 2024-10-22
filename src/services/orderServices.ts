@@ -43,7 +43,6 @@ export class OrderServices {
         shippingAddress,
         phoneNumber,
         postalCode,
-        orderStatus,
         orderChild,
       } = req.body;
       const order = await prismaService.orderParent.create({
@@ -58,7 +57,7 @@ export class OrderServices {
           shippingAddress,
           phoneNumber,
           postalCode,
-          orderStatus,
+          orderStatus:1,
           orderChild: {
             create: orderChild,
           },
