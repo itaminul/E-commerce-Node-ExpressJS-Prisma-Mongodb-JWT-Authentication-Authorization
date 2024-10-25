@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { error } from "console";
 import { NextFunction, Request, Response } from "express";
 const prismaService = new PrismaClient();
 export class OrderServices {
@@ -57,7 +58,7 @@ export class OrderServices {
           shippingAddress,
           phoneNumber,
           postalCode,
-          orderStatus:1,
+          orderStatus: 1,
           orderChild: {
             create: orderChild,
           },
@@ -129,6 +130,27 @@ export class OrderServices {
       });
 
       res.status(200).json(updatedOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async checkId(
+    orderId: string,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const orderIdCheck = await prismaService.orderParent.findUnique({
+        where: {
+          id: orderId,
+        },
+      });
+
+      if (!orderIdCheck) {
+        res.json(`This order ID is invalid!`);
+      }
     } catch (error) {
       next(error);
     }
